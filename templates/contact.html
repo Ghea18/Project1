@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="profile">
+         <div class="container card">    
+              <div class="row">
+                  <div class="col-md-4"> <!-- Images -->
+                      <img src="{{ url_for('static', filename='contact.png') }}" alt="stack photo" class="img">
+                  </div>
+                  <div class="col-md-8">
+                      <div class="container">
+                        <h1>Contact Me at</h1>
+                      </div>
+                        <hr>
+                      <ul class="container details">
+                        <li><p><i class="fas fa-globe" style="color:#000">&nbsp;&nbsp;</i>www.Ghea18.com</p></li>
+                        <li><p><i class="fas fa-phone" style="color:#000">&nbsp;&nbsp;</i>+072173836</p></li>
+                        <li><p><i class="fab fa-whatsapp" style="color:#000">&nbsp;&nbsp;</i>+628937213434</p></li>
+                        <li><p><i class="fa fa-envelope" style="color:#000">&nbsp;&nbsp;</i>Ghea18@email.com</p></li>
+                      </ul>
+              </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
