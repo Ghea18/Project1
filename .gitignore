@@ -1,2 +1,4 @@
 /flask_session/*
-
+/.sass-cache/*
+/__pycache__/*
+ghea18key
