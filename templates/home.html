@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="begin">
+        <h1>Pemrograman WEB</h1>
+        <div class="isi">
+            <dl>
+                <dt>Nama mahasiswa yang mengambil kuliah:</dt>
+                <dd><ul> <!-- Unorderer List -->
+                    <li><a>Ghea Chandra S</a></li>
+                    <li><a>Dimas Bagaskara</a></li>
+                    <li><a>Nani Masrifah</a></li>
+                    <li><a>Titi Sumarni</a></li>
+                    <li><a>Ramdhan Mala</a></li>
+                </ul></dd>
+            </dl>
+        </div>
+    </div>
+    <div id="container">
+        <div class="row">
+            <div class="col-md-5"> <!-- Bootstraps Grid Model 5 -->
+                <div class="box">
+                    <h4>Materi Pemrograman</h4>
+                    <p>
+                        Pemrograman WEB menggunakan platform Edx sebagai media belajar, didalamnya berisikan 11 session yang mebahas berbagai pengetahuan dasar dalam membangun halam web. Materi yang dipelajari diantaranya adalah menengai Git, HTML, CSS, SCSS, Python, Flask, dan JavaScript.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-7"> <!-- Bootstraps Grid Model 7 -->
+                <div class="box">
+                    <h4>Project Pemrograman</h4>
+                    <p>
+                        Terdapat beberapa project yang dapat dilakukan pada pemrograman WEB, diantaranya:
+                    </p>
+                    <ol> <!-- Order List -->
+                        <li>Project 0, Project ini melatih penggunaan HTML dan CSS untuk mendesign halaman web dan untuk belajar menggunkan SCSS untuk menulis stylesheets yang lebih kompleks.</li>
+                        <li>Project 1, Tujuan Project ini untuk melatih penggunan python dan memperoleh pengalaman menggunakan flask serta belajar penggunaan SQL untuk berinteraksi dengan database.</li>
+                        <li>Project 2, Pada project ini diperlukan untuk membangun tampilan halaman web serta belajar menggunakan JavaScript yang berjalan di server-side.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

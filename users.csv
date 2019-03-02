@@ -1,0 +1,4 @@
+id,user,name,mail,pswd,rank,date,stat
+1,admin,Ghea Chandra S,admin@flask.com,12345,admin,2018-07-23 07:23:00.000000,valid
+2,dimas,Dimas Bagaskara,dimas@flask.com,12345,costumer,2018-07-23 07:23:00.000000,valid
+3,nani,Nani Masrifah,nani@flask.com,12345,costumer,2018-07-23 07:23:00.000000,valid

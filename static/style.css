@@ -14,8 +14,12 @@ h1, h2 {
   font-weight: bold;
   margin: 0 0 14px 0; }
 
-h2, h3, h4 {
+h2, h3, h4, h5, h6 {
   color: #880a7b; }
+
+.btn {
+  color: #880a7b;
+  border-color: #41053b; }
 
 a {
   color: #003399;
@@ -89,7 +93,7 @@ footer {
   box-shadow: 0 0 8px #D0D0D0;
   text-align: right; }
   footer a {
-    color: #fff;
+    color: #fff !important;
     padding: 5px; }
 
 table {
@@ -110,6 +114,14 @@ tr:hover {
 thead {
   color: #880a7b;
   font-weight: bold; }
+
+.form-control-borderless {
+  border: none; }
+
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+  border: none;
+  outline: none;
+  box-shadow: none; }
 
 @media (max-width: 768px) {
   .card {
