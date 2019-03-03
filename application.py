@@ -100,7 +100,7 @@ def books():
     #data_book = Book.query.all()
     #data_book = Book.queryorder_by(func.random()).limit(5).all()
     page_data.add('search_key', key)
-    page_data.add('data_book', data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(5))
+    page_data.add('data_book', data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(8))
     # End content data
     log_st='logged_in' if session.get('logged_in') == True else 'logged_out'
     HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())

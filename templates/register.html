@@ -4,7 +4,7 @@
     {% if part['register'] %}
       <div class="container">
           <div class="profile">
-              <div class="container card">
+              <div class="container card medium">
                   <div class="row">
                       <div class="col-lg-12">
                           <div class="profile_content">
@@ -12,32 +12,32 @@
                           </div>
                           <form class="form-horizontal" method="post" action="{{ url_for('register') }}">
                             <div class="form-group">
-                              <label class="control-label col-sm-2" for="username">User Name:</label>
-                              <div class="col-sm-5">
-                                <input type="text" class="form-control" id="username" placeholder="Enter userame" name="username">
+                              <label class="control-label col-sm-4" for="username">User Name:</label>
+                              <div class="col-sm-12">
+                                <input type="text" class="form-control text-left" id="username" placeholder="Enter userame" name="username">
                               </div>
                             </div>
                             <div class="form-group">
-                              <label class="control-label col-sm-2" for="name">Name:</label>
-                              <div class="col-sm-5">
-                                <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+                              <label class="control-label col-sm-4" for="name">Name:</label>
+                              <div class="col-sm-12">
+                                <input type="text" class="form-control text-left" id="name" placeholder="Enter name" name="name">
                               </div>
                             </div>
                             <div class="form-group">
-                              <label class="control-label col-sm-2" for="email">Email:</label>
-                              <div class="col-sm-5">
-                                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                              <label class="control-label col-sm-4" for="email">Email:</label>
+                              <div class="col-sm-12">
+                                <input type="email" class="form-control text-left" id="email" placeholder="Enter email" name="email">
                               </div>
                             </div>
                             <div class="form-group">
-                              <label class="control-label col-sm-2" for="password">Password:</label>
-                              <div class="col-sm-5">          
-                                <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+                              <label class="control-label col-sm-4" for="password">Password:</label>
+                              <div class="col-sm-12">          
+                                <input type="password" class="form-control text-left" id="password" placeholder="Enter password" name="password">
                               </div>
                             </div>
                             <div class="form-group">        
-                              <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                              <div class="col-sm-offset-2 col-sm-12 text-right">
+                                <button type="submit" class="btn btn-outline-primary">Submit</button>
                               </div>
                             </div>
                           </form>
