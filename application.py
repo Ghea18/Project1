@@ -1,6 +1,7 @@
 import os
 import sys
 import requests
+from pprint import pprint
 from datetime import datetime
 from flask import Flask, session, render_template, url_for, request, redirect
 from flask_session import Session
@@ -88,19 +89,46 @@ def books():
     part["book_card"] = True
     part["book_list"] = False
 
-    res = requests.get("https://www.goodreads.com/search/index.xml", params={"key": "dqUu9oCrKhE1x47m3oAUQ", "q": "Ender%27s+Game"});
-    if res.status_code != 200:
-        raise Exception("ERROR: API request unsuccessful.");    
-    book = res.text;
-
     key = request.url
     key = request.args.get('search')
     print(key)
-    data_book = Book.query.filter(Book.author.like(f"%{key}%")).all()
+    data_book = Book.query.filter(Book.author.like(f"%{key}%")).limit(5)
+    data_book = data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(8)
     #data_book = Book.query.all()
     #data_book = Book.queryorder_by(func.random()).limit(5).all()
+
+    # Get info buku
+    colection=[]
+    import xml.etree.ElementTree as ET
+    for book in data_book:
+        res = requests.get("https://www.goodreads.com/search/index.xml", params={"key": "dqUu9oCrKhE1x47m3oAUQ", "q": book.isbn});
+        if res.status_code != 200:
+            raise Exception("ERROR: API request unsuccessful.");   
+        root = ET.fromstring(res.text);
+        res_stt = root[1][1].text
+        res_end = root[1][2].text
+        res_ttl = root[1][3].text
+        res_tmt = root[1][5].text
+        print(f"start:{ res_stt }, end:{ res_end }, total:{ res_ttl }, time:{ res_tmt }")
+        work = root.find("search").find("results")[0]
+        ket_bk  = work.find("best_book")
+        rating  = work.find("average_rating").text
+        author  = ket_bk.find("author").find("name").text
+        judul   = ket_bk.find("title").text
+        img_url = ket_bk.find("image_url").text
+        colection.append({
+            'title'        : book.title,
+            'year'        : book.year,
+            'isbn'        : book.isbn,
+            'author'    : book.author,
+            'id'        : book.id,
+            'rating'      : rating, 
+            'img_url'    : img_url})
+    data_book = colection
+    # End get info buku
+
     page_data.add('search_key', key)
-    page_data.add('data_book', data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(8))
+    page_data.add('data_book', data_book)
     # End content data
     log_st='logged_in' if session.get('logged_in') == True else 'logged_out'
     HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())
