@@ -1,0 +1,13 @@
+      {% block book_list %}
+        {% if part['review_list'] %}
+                {% for review in data['data_review'] %}
+                 <blockquote class="blockquote text-left mb-auto fadeInDown">
+                    <div class="stips_cmd" style="border: 1px solid #f480fc;border-radius: 8px;">
+                        <h6 class="h6 text-dark"><a class="">{{ review['name'] }}</a>&nbsp;-&nbsp;<i class="fa fa-star" style="color:yellow"></i> {{ review['rating'] }}</h6>
+                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                        <a class="blockquote-footer">{{ review['date'] }}</a>
+                    </div>
+                  </blockquote>
+                {% endfor %} 
+        {% endif %}
+      {% endblock %}

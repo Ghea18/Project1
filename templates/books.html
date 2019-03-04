@@ -54,7 +54,7 @@
                            <hr>
                            <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
                            <div class="col text-right">
-                               <a file-id="{{ book['id'] }}"class="btn btn-outline-primary btn-sm" href="http://www.jquery2dotnet.com/">Continue reading</a> 
+                               <a file-id="{{ book['id'] }}"class="btn btn-outline-primary btn-sm" href="{{ url_for('book') }}?id={{ book['id'] }}&isbn={{ book['isbn'] }}">Continue reading</a> 
                            </div>
                         </div>
                       </div>
@@ -102,5 +102,14 @@
                 </div>
             </div>
         {% endif %}
+      {% endblock %}
+      {% block script %}
+      <script type="text/javascript">
+        function ajaxPOST(form, button){
+           let SSaP_data = new g2_ajax("POST", "{{ url_for('books') }}");
+           SSaP_data.form(form);
+           SSaP_data.send('ajaxDiv', button, '#6424D9');
+        }
+      </script>
       {% endblock %}
     {% endblock %}

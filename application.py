@@ -4,6 +4,7 @@ import requests
 from pprint import pprint
 from datetime import datetime
 from flask import Flask, session, render_template, url_for, request, redirect
+from flask_scss import Scss
 from flask_session import Session
 from sqlalchemy import create_engine 
 from sqlalchemy.sql import func
@@ -15,6 +16,9 @@ from models import User, Book
 
 app = Flask(__name__)
 title = "Project 1 (One)"
+
+#scss = Bundle('style.scss', filters='pyscss', output='all.css')
+Scss(app, static_dir='static', asset_dir='static')
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
@@ -43,7 +47,7 @@ def index():
     # End content data
     log_st='logged_in' if session.get('logged_in') == True else 'logged_out'
     HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())
-    return f"Project 1: TODO state='{log_st}' methot:'{request.method}'<br> {HTML} <br>"
+    return HTML
 
 @app.route("/about")
 def about():
@@ -93,7 +97,7 @@ def books():
     key = request.args.get('search')
     print(key)
     data_book = Book.query.filter(Book.author.like(f"%{key}%")).limit(5)
-    data_book = data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(8)
+    data_book = data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(4)
     #data_book = Book.query.all()
     #data_book = Book.queryorder_by(func.random()).limit(5).all()
 
@@ -134,8 +138,8 @@ def books():
     HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())
     return f"Project 1: TODO state='{log_st}' methot:'{request.method}'<br> {HTML} <br>"
 
-@app.route("/cekbook")
-def cekbook():
+@app.route("/book")
+def book():
     html_file='book'
     part={}
     page_data = Data_control()
@@ -143,14 +147,80 @@ def cekbook():
     page_data.add('page_title', 'PJ1 | '+(html_file.title()))
     # Content data code
     page_data.add('title', title)
-    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "dqUu9oCrKhE1x47m3oAUQ", "isbns": "9781632168146"});
+
+    part["book_leflet"] = True
+
+    last = request.url
+    key = request.args.get('id')
+    key = request.args.get('isbn')
+    data_book = Book.query.filter_by(isbn=key)
+    data_book = data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(1)
+    #data_book = Book.query.all()
+    #data_book = Book.queryorder_by(func.random()).limit(5).all()
+
+    # Get info buku
+    colection=[]
+    import xml.etree.ElementTree as ET
+    book = data_book[0]
+    res = requests.get("https://www.goodreads.com/search/index.xml", params={"key": "dqUu9oCrKhE1x47m3oAUQ", "q": book.isbn});
     if res.status_code != 200:
-        raise Exception("ERROR: API request unsuccessful.");    
-    BOOK = res.json();
+        raise Exception("ERROR: API request unsuccessful.");   
+    root = ET.fromstring(res.text);
+    work = root.find("search").find("results")[0]
+    ket_bk  = work.find("best_book")
+    rating  = work.find("average_rating").text
+    author  = ket_bk.find("author").find("name").text
+    judul   = ket_bk.find("title").text
+    img_url = ket_bk.find("image_url").text
+    colection.append({
+        'title'        : book.title,
+        'year'        : book.year,
+        'isbn'        : book.isbn,
+        'author'    : book.author,
+        'id'        : book.id,
+        'rating'      : rating, 
+        'img_url'    : img_url})
+    data_book = colection
+    # End get info buku
+
+    page_data.add('search_key', key)
+    page_data.add('data_book', data_book)
     # End content data
     log_st='logged_in' if session.get('logged_in') == True else 'logged_out'
-    HTML = render_template(html_file+'.html', title = title, part=part, data = page_data.all())
+    HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())
     return f"Project 1: TODO state='{log_st}' methot:'{request.method}'<br> {HTML} <br>"
+
+@app.route("/API/add_review", methods=["POST"])
+def add_review():
+    html_file='list'
+    part={}
+    page_data = Data_control()
+    page_data.add('page_active', html_file)
+    page_data.add('page_title', 'PJ1 | '+(html_file.title()))
+    # Content data code
+    page_data.add('title', title)
+    part["review_list"] = True
+
+    # Get info buku
+    last = request.url
+    data_book = Book.query.order_by(func.random()).limit(10)
+    # End get info buku
+    colection=[]
+    for book in data_book:
+        colection.append({
+            'id'      : book.id,
+            'name'    : book.author,
+            'rating'  : 5,
+            'date'    : book.year,
+            'title'   : book.title,
+            'isbn'    : book.isbn,
+            })
+    data_book = colection
+    page_data.add('data_review', data_book)
+    # End content data
+    log_st='logged_in' if session.get('logged_in') == True else 'logged_out'
+    HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())
+    return f"{HTML}"
 
 @app.route('/user')
 def user():

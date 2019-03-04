@@ -1,5 +1,5 @@
-/flask_session/*
-/.sass-cache/*
-/__pycache__/*
-ghea18key
 __pycache__/
+.sass-cache/
+flask_session/
+lib/
+bin/

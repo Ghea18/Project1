@@ -8,7 +8,7 @@ body {
     padding-top: 55pt;
     box-shadow: 0 0 8px #D0D0D0;
     color: white;
-    background-color: #880a7b; }
+    background-color: #000000; }
     header h4 {
       color: #ffffff;
       padding-right: 15px;
@@ -29,7 +29,7 @@ body {
     #begin h1, #begin h2, #begin h3, #begin h4, #begin h5, #container h1,
     #container h2, #container h3, #container h4, #container h5, .container h1,
     .container h2, .container h3, .container h4, .container h5 {
-      color: #880a7b; }
+      color: #000000; }
       #begin h6, #container h6, .container h6 {
         color: #fec400; }
 
@@ -53,12 +53,12 @@ body {
           box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }
 
           .btn {
-            color: #880a7b;
-            border-color: #41053b; }
+            color: #000000;
+            border-color: black; }
 
             .btn:hover {
-              background-color: #a00c90;
-              border-color: #920b84; }
+              background-color: #0d0d0d;
+              border-color: #050505; }
 
               a {
                 color: #003399;
@@ -126,7 +126,7 @@ body {
                                     border-radius: 0 0 10px 10px; }
 
                                     input[type=button], input[type=submit], input[type=reset] {
-                                      background-color: #ef23da;
+                                      background-color: #404040;
                                       border: none;
                                       color: white;
                                       padding: 10px 80px;
@@ -146,7 +146,7 @@ body {
                                       -o-transition: all 0.3s ease-in-out;
                                       transition: all 0.3s ease-in-out; }
                                       input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
-                                        background-color: #cf0fbb; }
+                                        background-color: #262626; }
                                         input[type=button]:active, input[type=submit]:active, input[type=reset]:active {
                                           -moz-transform: scale(0.95);
                                           -webkit-transform: scale(0.95);
@@ -177,7 +177,7 @@ input[type=text], input[type=password], input[type=email], input[type=search] {
   input[type=search]:focus {
     background-color: #ffffff;
     border-color: #fcfcfc;
-    border-bottom: 2px solid #880a7b;
+    border-bottom: 2px solid #000000;
     outline: 0;
     box-shadow: 0 0 0px 0.1rem #fafafa; }
     input[type=text]:placeholder, input[type=password]:placeholder,
@@ -294,8 +294,7 @@ input[type=text], input[type=password], input[type=email], input[type=search] {
                     box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.09); }
 
                     #icon {
-                      width: 55%;
-                      padding: 0px 0px 25px 0px; }
+                      width: 35%; }
 
                       .titik_after::after {
                         content: ":  "; }
@@ -329,7 +328,7 @@ input[type=text], input[type=password], input[type=email], input[type=search] {
                                     padding: 40px 15px; }
 
                                     .profile_content h2 {
-                                      color: #880a7b; }
+                                      color: #000000; }
 
                                       footer {
                                         margin: 10px;
@@ -356,7 +355,7 @@ table {
         padding: 20px; }
 
         thead {
-          color: #880a7b;
+          color: #000000;
           font-weight: bold; }
 
           .form-control-borderless {
@@ -372,7 +371,7 @@ table {
                 .card {
                   padding: 15pt 15pt 15pt 15pt;   }
                   .profile_content {
-                    background-color: #880a7b;
+                    background-color: #000000;
                     color: white;
                     padding: 15px;   }
                     .profile_content h2 {

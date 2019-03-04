@@ -5,3 +5,5 @@ SQLAlchemy
 requests
 pusher
 python-dotenv
+pyScss
+Flask-Scss

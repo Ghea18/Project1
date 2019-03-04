@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+    {% block content %}
+      {% block book_leflet %}
+        {% if part['book_leflet'] %}
+            <div class="container">
+               <h3 class="pb-3 mb-4 font-italic border-bottom">
+                  Detail Buku
+               </h3>
+               <div class="row">
+                  {% if data['data_book'] == [] %}
+                    <div class="col text-center">
+                        <h5>Buku Tidak ditemukan, silahkan buka melalui halaman pencarian.</h5>
+                    </div>
+                  {% endif %}
+                  {% for book in data['data_book'] %}
+                    <div class="col-md-12">
+                      <div class="card flex-md-row mb-4 shadow-sm h-md-250 profile_img">
+                        <img class="card-img-right flex-auto d-none d-lg-block" alt="Thumbnail [300x250]" src="{{ book['img_url'] }}" style="max-width: 300px; height: 400px;">
+                        <div class="card-body d-flex flex-column align-items-start">
+                            <div class="row" style="width: 90%";>
+                                <div class="col-md-3">
+                                    <h5 class="text-dark">Judul</h5>
+                                </div>
+                                <div class="col-md-8">
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ book['title'] }}</h5></strong>
+                                </div>
+                            </div>
+                            <div class="row" style="width: 90%";>
+                                <div class="col-md-3">
+                                    <h5 class="text-dark">Pengarang</h5>
+                                </div>
+                                <div class="col-md-8">
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ book['author'] }}</h5></strong>
+                                </div>
+                            </div>
+                            <div class="row" style="width: 90%";>
+                                <div class="col-md-3">
+                                    <h5 class="text-dark">Tahun Terbit</h5>
+                                </div>
+                                <div class="col-md-8">
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ book['year'] }}</h5></strong>
+                                </div>
+                            </div>
+                            <div class="row" style="width: 90%";>
+                                <div class="col-md-3">
+                                    <h5 class="text-dark">ISBN</h5>
+                                </div>
+                                <div class="col-md-8">
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ book['isbn'] }}</h5></strong>
+                                </div>
+                            </div>
+                            <div class="row" style="width: 90%";>
+                                <div class="col-md-3">
+                                    <h5 class="text-dark">Rating</h5>
+                                </div>
+                                <div class="col-md-8">
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before"><i class="fa fa-star" style="color:yellow"></i></i> {{ book['rating'] }}</h5></strong>
+                                </div>
+                            </div>
+                            <div class="text-right" style="width: 100%;padding-top: 170px;">
+                                <!-- Button trigger modal -->
+                               <a file-id="{{ book['id'] }}" class="btn btn-outline-primary btn-sm mb-auto" data-toggle="modal" data-target="#reviewModal">Tulis Review</a>
+                               <a file-id="{{ book['id'] }}" class="btn btn-outline-primary btn-sm" href="{{ url_for('books') }}">Kembali ke Pencarian</a>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="reviewModalLabel">Tulis Review</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <form>
+                          <div class="modal-body">
+                            <div class="input-group mb-3">
+                              <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Rating</label>
+                              </div>
+                              <select class="custom-select" id="inputGroupSelect01" name="rating">
+                                <option selected>Choose...</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                                <option value="4">Empat</option>
+                                <option value="5">Lima</option>
+                              </select>
+                            </div> <!--
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Rating</label>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                  <label class="form-check-label" for="inlineRadio1">1</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                  <label class="form-check-label" for="inlineRadio2">2</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                                  <label class="form-check-label" for="inlineRadio3">3</label>
+                                </div>
+                            </div> -->
+                          <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Review<a style="color:red">*</a></label>
+                            <textarea class="form-control" name="review" id="exampleFormControlTextarea1" rows="5" required="true"></textarea>
+                          </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" onclick = 'ajaxPOST(this.form, this)' return false>Save changes</button>
+                          </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                       <div class="card card-body d-flex flex-column align-items-start">
+                           <h5 class="h5">Review Pengunjung</h5>
+                            <div id="ajax_result"></div>
+                       </div>
+                    </div>
+                  {% endfor %} 
+               </div>
+               <hr>
+            </div>
+        {% endif %}
+        {% block script %}
+        <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+           console.log('Your document is ready!');
+            let ajax_form = new g2_ajax('POST', "{{ url_for('add_review') }}");
+            ajax_form.postURL("data=review&seach=0375701907");
+            ajax_form.send('ajax_result');
+        });
+
+
+        function ajaxPOST(form, button){
+            let ajax_form = new g2_ajax(form, "{{ url_for('add_review') }}");
+            ajax_form.send('ajax_result', button, '#6424D9');
+        }
+        </script>
+        {% endblock %}
+      {% endblock %}
+    {% endblock %}

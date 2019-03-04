@@ -1,0 +1,52 @@
+======================================================================================
+*** Install Python ***
+======================================================================================
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt install python3.7
+
+
+======================================================================================
+*** Virtual Envoirment ***
+======================================================================================
+python3.7 -m virtualenv project1
+python3.7 -m virtualenv --relocatable project1
+cd project1/
+source bin/activate
+pip3 install -r requirements.txt
+
+
+======================================================================================
+*** make sqlite database ****
+======================================================================================
+python3
+>>> from database import init_db
+>>> init_db()
+
+
+======================================================================================
+*** Menjalankan Flask ***
+======================================================================================
+source bin/activate
+export DATABASE_URL="postgres://nrpdpcdgweixjb:01a255acd77e3eaa7c808e768f94fceb5c2a0044d3cb5ac5197896fc07658cec@ec2-23-21-130-182.compute-1.amazonaws.com:5432/d35hm8i3hrbss4"
+FLASK_APP=application.py FLASK_DEBUG=1 python -m flask run
+
+
+======================================================================================
+*** Create Repository tetapi jangan inisiasi readme ***
+======================================================================================
+git init
+git config user.name "Ghea18"
+git config user.email "gheachandra.2018@student.uny.ac.id"
+git add --all
+git commit -m "All Clear! Project1 Ready"
+git remote add origin https://github.com/Ghea18/Project1.git
+git push -u origin master
+
+
+======================================================================================
+*** Cek git Config ***
+======================================================================================
+cat .git/config
+git remote set-url origin https://github.com/Ghea18/Project1.git
