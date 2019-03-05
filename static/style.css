@@ -195,8 +195,8 @@ input[type=text], input[type=password], input[type=email], input[type=search] {
   @-webkit-keyframes fadeInDown {
     0% {
       opacity: 0;
-      -webkit-transform: translate3d(0, -100%, 0);
-      transform: translate3d(0, -100%, 0);   }
+      -webkit-transform: translate3d(-100%, 0, 0);
+      transform: translate3d(-100%, 0, 0);   }
       100% {
         opacity: 1;
         -webkit-transform: none;
@@ -206,8 +206,38 @@ input[type=text], input[type=password], input[type=email], input[type=search] {
 @keyframes fadeInDown {
   0% {
     opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);   }
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);   }
+    100% {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none;   }
+}
+
+.fadeInRight {
+  -webkit-animation-name: fadeInRight;
+  animation-name: fadeInRight;
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both; }
+
+  @-webkit-keyframes fadeInRight {
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(-10px, 0, 0);
+      transform: translate3d(-10px, 0, 0);   }
+      100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;   }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);   }
     100% {
       opacity: 1;
       -webkit-transform: none;
@@ -286,59 +316,67 @@ input[type=text], input[type=password], input[type=email], input[type=search] {
                 *:focus {
                   outline: none; }
 
-                  .stips_cmd {
-                    border: 1px solid #eebaf2;
-                    border-radius: 3px;
-                    margin: 5px;
-                    padding: 15px;
-                    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.09); }
+                  .review, .review .date-review {
+                    margin-bottom: 0 !important;
+                    font-size: 15; }
 
-                    #icon {
-                      width: 55%;
-                      padding: 0px 0px 25px 0px; }
+                    .review .date-review {
+                      font-size: 12;
+                      color: #6a696a; }
 
-                      .titik_after::after {
-                        content: ":  "; }
+                      .stips_cmd {
+                        border: 1px solid #eebaf2;
+                        border-radius: 3px;
+                        margin: 5px;
+                        padding: 15px;
+                        box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.09); }
 
-                        .titik_before::before {
-                          content: ":  "; }
+                        #icon {
+                          width: 55%;
+                          padding: 0px 0px 25px 0px; }
 
-                          .isi {
-                            margin: 15px; }
+                          .titik_after::after {
+                            content: ":  "; }
 
-                            li a:hover {
-                              color: #FFF;
-                              background-image: linear-gradient(rgba(255, 255, 255, 0.07), transparent);
-                              text-decoration: none; }
+                            .titik_before::before {
+                              content: ":  "; }
 
-                              .profile {
-                                padding-top: 45pt;
-                                padding-bottom: 50pt; }
+                              .isi {
+                                margin: 15px; }
 
-                                .profile_img img {
-                                  border: 1px solid #ddd;
-                                  border-radius: 4px;
-                                  padding: 5px;
-                                  max-width: 260px;
-                                  width: 80%;
-                                  background-color: white;
-                                  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+                                li a:hover {
+                                  color: #FFF;
+                                  background-image: linear-gradient(rgba(255, 255, 255, 0.07), transparent);
+                                  text-decoration: none; }
 
-                                  .img {
-                                    width: 100%;
-                                    padding: 40px 15px; }
+                                  .profile {
+                                    padding-top: 45pt;
+                                    padding-bottom: 50pt; }
 
-                                    .profile_content h2 {
-                                      color: #880a7b; }
+                                    .profile_img img {
+                                      border: 1px solid #ddd;
+                                      border-radius: 4px;
+                                      padding: 5px;
+                                      max-width: 260px;
+                                      width: 80%;
+                                      background-color: white;
+                                      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
 
-                                      footer {
-                                        margin: 10px;
-                                        background-color: #4F5155;
-                                        box-shadow: 0 0 8px #D0D0D0;
-                                        text-align: right; }
-                                        footer a {
-                                          color: #fff !important;
-                                          padding: 5px; }
+                                      .img {
+                                        width: 100%;
+                                        padding: 40px 15px; }
+
+                                        .profile_content h2 {
+                                          color: #880a7b; }
+
+                                          footer {
+                                            margin: 10px;
+                                            background-color: #4F5155;
+                                            box-shadow: 0 0 8px #D0D0D0;
+                                            text-align: right; }
+                                            footer a {
+                                              color: #fff !important;
+                                              padding: 5px; }
 
 table {
   border-collapse: collapse;

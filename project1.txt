@@ -8,11 +8,11 @@ sudo apt install python3.7
 
 
 ======================================================================================
-*** Virtual Envoirment ***
+*** Install Virtual Envoirment and Dependency***
 ======================================================================================
-python3.7 -m virtualenv project1
-python3.7 -m virtualenv --relocatable project1
-cd project1/
+cd ..
+python3.7 -m virtualenv project1a
+cd project1a/
 source bin/activate
 pip3 install -r requirements.txt
 

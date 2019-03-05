@@ -9,6 +9,7 @@ class g2_ajax{
         this._query ='';
         this._respons;
         this._tabReq;
+        this._seriesReq
         var f_id;
         var f_val;
         if (form!=null) {
@@ -61,7 +62,7 @@ class g2_ajax{
            this._query = data;
         }
     }
-    postURL(data){
+    postURL(data, add){
         if(Array.isArray(data)){
            for(i=0; i <= data.leght; i++){
               if(i==0){
@@ -71,7 +72,9 @@ class g2_ajax{
               }
            }
         }
-        else{
+        else if(add){
+           this._query = this._query + data;
+        }else{
            this._query = data;
         }
     }
@@ -112,6 +115,9 @@ class g2_ajax{
     table(bol){
         this._tabReq = bol;
     }
+    series(bol){
+        this._seriesReq = bol;
+    }
     send(id, lod, color){
         if(lod != null && lod != ''){
            this._btn = lod;
@@ -126,6 +132,7 @@ class g2_ajax{
         var btn = this._btn;
         var element = this._element;
         var buildTab = this._tabReq;
+        var buildSeries = this._seriesReq;
         var result;
         var notif = 0;
         var btnLast;
@@ -178,6 +185,9 @@ class g2_ajax{
               console.log('request ajax send!');
            }
         }
+        const sleep = (milliseconds) => {
+            return new Promise(resolve => setTimeout(resolve, milliseconds))
+        }
         function addtoBTN(TEXT){
             if(btn != null && btn != ''){
                 btnLast = btn.innerHTML;
@@ -192,7 +202,21 @@ class g2_ajax{
                     console.log(table);
                     document.getElementById(element).innerHTML = '';
                     document.getElementById(element).appendChild(table);
-                }else{
+                }else if(buildSeries == true){
+                    var json = JSON.parse(TEXT);
+                    document.getElementById(element).innerHTML = '';
+                    console.log('Add Series')
+                    for (var e in json) {
+                        sleep(1000);
+                        try {
+                            document.getElementById(element).appendChild(g2_response(json[e])); 
+                        } catch (error) {
+                            console.log(error)
+                            document.getElementById(element).appendChild(json[e]);
+                        }
+                    };
+                }
+                else {
                     document.getElementById(element).innerHTML = TEXT;
                 }
                 return true;

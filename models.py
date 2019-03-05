@@ -50,17 +50,19 @@ class Review(Base):
     __tablename__ = 'reviews'
     id = Column(Integer, primary_key=True)
     bok_id = Column(Integer)
-    usr_id = Column(Integer)
     b_isbn = Column(String(50))
+    usr_id = Column(Integer)
+    name = Column(String(50))
     review = Column(String(256))
     date = Column(DateTime, default=datetime.utcnow)
     stat = Column(String(120), default="ready")
 
-    def __init__(self, bok_id=None, usr_id=None, b_isbn=None, review=None, date=None, stat=None):
+    def __init__(self, bok_id=None, b_isbn=None, usr_id=None, name=None, review=None, date=None, stat=None):
         self.bok_id = bok_id
-        self.usr_id = usr_id
-        self.review = review
         self.b_isbn = b_isbn
+        self.usr_id = usr_id
+        self.name = name
+        self.review = review
         self.date = date
         self.stat = stat
 

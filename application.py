@@ -3,7 +3,7 @@ import sys
 import requests
 from pprint import pprint
 from datetime import datetime
-from flask import Flask, session, render_template, url_for, request, redirect
+from flask import Flask, session, render_template, url_for, request, redirect, jsonify
 from flask_scss import Scss
 from flask_session import Session
 from sqlalchemy import create_engine 
@@ -12,7 +12,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from control_center import Data_control
 from database import db_session
-from models import User, Book
+from models import User, Book, Review
 
 app = Flask(__name__)
 title = "Project 1 (One)"
@@ -156,7 +156,7 @@ def book():
     data_book = Book.query.filter_by(isbn=key)
     data_book = data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(1)
     #data_book = Book.query.all()
-    #data_book = Book.queryorder_by(func.random()).limit(5).all()
+    #data_book = Book.query.order_by(func.random()).limit(5).all()
 
     # Get info buku
     colection=[]
@@ -190,7 +190,48 @@ def book():
     HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())
     return f"Project 1: TODO state='{log_st}' methot:'{request.method}'<br> {HTML} <br>"
 
-@app.route("/API/add_review", methods=["POST"])
+@app.route("/book")
+def book1():
+    html_file='book1'
+    part={}
+    page_data = Data_control()
+    page_data.add('page_active', html_file)
+    page_data.add('page_title', 'PJ1 | '+(html_file.title()))
+    # Content data code
+    page_data.add('title', title)
+
+    part["book_leflet"] = True
+
+    last = request.url
+    key = request.args.get('id')
+    key = request.args.get('isbn')
+    data_book = Book.query.filter_by(isbn=key)
+    data_book = data_book if not (key == None or key == "") else Book.query.order_by(func.random()).limit(1)
+    #data_book = Book.query.all()
+    #data_book = Book.queryorder_by(func.random()).limit(5).all()
+
+    # Get info buku
+    book = data_book[0]
+    colection=[]
+    colection.append({
+        'title'        : book.title,
+        'year'        : book.year,
+        'isbn'        : book.isbn,
+        'author'    : book.author,
+        'id'        : book.id,
+        'rating'      : 5, 
+        'img_url'    : ""})
+    data_book = colection
+    # End get info buku
+
+    page_data.add('search_key', key)
+    page_data.add('data_book', data_book)
+    # End content data
+    log_st='logged_in' if session.get('logged_in') == True else 'logged_out'
+    HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())
+    return f"Project 1: TODO state='{log_st}' methot:'{request.method}'<br> {HTML} <br>"
+
+@app.route("/API/add_review", methods=["GET","POST"])
 def add_review():
     html_file='list'
     part={}
@@ -203,24 +244,26 @@ def add_review():
 
     # Get info buku
     last = request.url
-    data_book = Book.query.order_by(func.random()).limit(10)
+    cek = request.args.get('data')
+    key = request.args.get('search')
+    data_book = Review.query.filter_by(b_isbn='0525421033')
+    #data_book = Book.query.order_by(func.random()).limit(10)
     # End get info buku
-    colection=[]
+    colection={}
+    num = 0
     for book in data_book:
-        colection.append({
+        colection[num]=({
             'id'      : book.id,
-            'name'    : book.author,
+            'book_id' : book.bok_id,
+            'user_id' : book.usr_id,
+            'name'    : book.name,
             'rating'  : 5,
-            'date'    : book.year,
-            'title'   : book.title,
-            'isbn'    : book.isbn,
+            'review'  : book.review,
+            'date'    : book.date
             })
+        num = num+1
     data_book = colection
-    page_data.add('data_review', data_book)
-    # End content data
-    log_st='logged_in' if session.get('logged_in') == True else 'logged_out'
-    HTML = render_template(html_file+'.html', title = title,  part=part, data = page_data.all())
-    return f"{HTML}"
+    return jsonify(data_book)
 
 @app.route('/user')
 def user():

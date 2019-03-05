@@ -122,7 +122,7 @@
                     <div class="col-md-12">
                        <div class="card card-body d-flex flex-column align-items-start">
                            <h5 class="h5">Review Pengunjung</h5>
-                            <div id="ajax_result"></div>
+                            <div id="ajax_result" class="fadeInRight"></div>
                        </div>
                     </div>
                   {% endfor %} 
@@ -132,16 +132,49 @@
         {% endif %}
         {% block script %}
         <script type="text/javascript">
+        function g2_response(r){
+          var i = document.createElement("i");
+          i.className = 'fa fa-star color-yelow';
+          var a = document.createElement("a");
+          a.appendChild(document.createTextNode(r.name));
+          var s = document.createElement("a");
+          s.appendChild(document.createTextNode(r.rating));
+          var titl = document.createElement("h6");
+          titl.appendChild(a).insertAdjacentHTML('afterend', "&nbsp; - &nbsp;");
+          titl.appendChild(i).insertAdjacentHTML('afterend', "&nbsp;");
+          titl.appendChild(s);
+          titl.className = 'h6 text-dark';
+          var text = document.createElement("p");
+          text.appendChild(document.createTextNode(r.review));
+          text.className = 'mb-0 review';
+          var foot = document.createElement("a");
+          foot.appendChild(document.createTextNode(r.date));
+          foot.className = 'blockquote-footer date-review';
+          var div = document.createElement("div");
+          div.appendChild(titl);
+          div.appendChild(text);
+          div.appendChild(foot);
+          div.className = 'stips_cmd';
+          var blqot = document.createElement("blockquote");
+          blqot.appendChild(div);
+          blqot.className = 'blockquote text-left mb-auto';
+          node = document.createElement("div");
+          node.className = 'fadeInRight';
+          node.appendChild(blqot);
+          return node;
+        }
         document.addEventListener("DOMContentLoaded", function() {
            console.log('Your document is ready!');
             let ajax_form = new g2_ajax('POST', "{{ url_for('add_review') }}");
-            ajax_form.postURL("data=review&seach=0375701907");
+            ajax_form.postURL("data=review&search=0375701907");
+            ajax_form.series(true);
             ajax_form.send('ajax_result');
         });
 
-
         function ajaxPOST(form, button){
             let ajax_form = new g2_ajax(form, "{{ url_for('add_review') }}");
+            ajax_form.series(true);
+            ajax_form.postURL("&data=review&search=0375701907", true);
             ajax_form.send('ajax_result', button, '#6424D9');
         }
         </script>
