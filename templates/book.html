@@ -12,17 +12,17 @@
                         <h5>Buku Tidak ditemukan, silahkan buka melalui halaman pencarian.</h5>
                     </div>
                   {% endif %}
-                  {% for book in data['data_book'] %}
+                  {% if data['data_book'] != [] %}
                     <div class="col-md-12">
                       <div class="card flex-md-row mb-4 shadow-sm h-md-250 profile_img">
-                        <img class="card-img-right flex-auto d-none d-lg-block" alt="Thumbnail [300x250]" src="{{ book['img_url'] }}" style="max-width: 300px; height: 400px;">
+                        <img class="card-img-right flex-auto d-none d-lg-block" alt="Thumbnail [300x250]" src="{{ data['data_book']['img_url'] }}" style="max-width: 300px; height: 400px;">
                         <div class="card-body d-flex flex-column align-items-start">
                             <div class="row" style="width: 90%";>
                                 <div class="col-md-3">
                                     <h5 class="text-dark">Judul</h5>
                                 </div>
                                 <div class="col-md-8">
-                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ book['title'] }}</h5></strong>
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ data['data_book']['title'] }}</h5></strong>
                                 </div>
                             </div>
                             <div class="row" style="width: 90%";>
@@ -30,7 +30,7 @@
                                     <h5 class="text-dark">Pengarang</h5>
                                 </div>
                                 <div class="col-md-8">
-                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ book['author'] }}</h5></strong>
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ data['data_book']['author'] }}</h5></strong>
                                 </div>
                             </div>
                             <div class="row" style="width: 90%";>
@@ -38,7 +38,7 @@
                                     <h5 class="text-dark">Tahun Terbit</h5>
                                 </div>
                                 <div class="col-md-8">
-                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ book['year'] }}</h5></strong>
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ data['data_book']['year'] }}</h5></strong>
                                 </div>
                             </div>
                             <div class="row" style="width: 90%";>
@@ -46,7 +46,7 @@
                                     <h5 class="text-dark">ISBN</h5>
                                 </div>
                                 <div class="col-md-8">
-                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ book['isbn'] }}</h5></strong>
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before">{{ data['data_book']['isbn'] }}</h5></strong>
                                 </div>
                             </div>
                             <div class="row" style="width: 90%";>
@@ -54,13 +54,13 @@
                                     <h5 class="text-dark">Rating</h5>
                                 </div>
                                 <div class="col-md-8">
-                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before"><i class="fa fa-star" style="color:yellow"></i></i> {{ book['rating'] }}</h5></strong>
+                                    <strong class="d-inline-block mb-2 text-primary"><h5 class="text-dark titik_before"><i class="fa fa-star" style="color:yellow"></i></i> {{ data['data_book']['rating'] }}</h5></strong>
                                 </div>
                             </div>
                             <div class="text-right" style="width: 100%;padding-top: 170px;">
                                 <!-- Button trigger modal -->
-                               <a file-id="{{ book['id'] }}" class="btn btn-outline-primary btn-sm mb-auto" data-toggle="modal" data-target="#reviewModal">Tulis Review</a>
-                               <a file-id="{{ book['id'] }}" class="btn btn-outline-primary btn-sm" href="{{ url_for('books') }}">Kembali ke Pencarian</a>
+                               <a class="btn btn-outline-primary btn-sm mb-auto" data-toggle="modal" data-target="#reviewModal">Tulis Review</a>
+                               <a class="btn btn-outline-primary btn-sm" href="{{ url_for('books') }}">Kembali ke Pencarian</a>
                             </div>
                         </div>
                       </div>
@@ -90,30 +90,15 @@
                                 <option value="4">Empat</option>
                                 <option value="5">Lima</option>
                               </select>
-                            </div> <!--
-                            <div class="form-group">
-                                <label for="exampleFormControlInput1">Rating</label>
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                  <label class="form-check-label" for="inlineRadio1">1</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                  <label class="form-check-label" for="inlineRadio2">2</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-                                  <label class="form-check-label" for="inlineRadio3">3</label>
-                                </div>
-                            </div> -->
+                            </div>
                           <div class="form-group">
                             <label for="exampleFormControlTextarea1">Review<a style="color:red">*</a></label>
-                            <textarea class="form-control" name="review" id="exampleFormControlTextarea1" rows="5" required="true"></textarea>
+                            <textarea class="form-control" name="review" id="review" rows="5" required="true"></textarea>
                           </div>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" onclick = 'ajaxPOST(this.form, this)' return false>Save changes</button>
+                            <button type="submit" class="btn btn-primary" onclick = 'sendReview(this.form, this)' return false>Save changes</button>
                           </div>
                           </form>
                         </div>
@@ -122,59 +107,68 @@
                     <div class="col-md-12">
                        <div class="card card-body d-flex flex-column align-items-start">
                            <h5 class="h5">Review Pengunjung</h5>
-                            <div id="ajax_result" class="fadeInRight"></div>
+                            <div id="ajax_result" class="fadeInRight" style="width: 100%;"></div>
                        </div>
                     </div>
-                  {% endfor %} 
+                  {% endif %} 
                </div>
                <hr>
             </div>
         {% endif %}
         {% block script %}
         <script type="text/javascript">
-        function g2_response(r){
-          var i = document.createElement("i");
-          i.className = 'fa fa-star color-yelow';
-          var a = document.createElement("a");
-          a.appendChild(document.createTextNode(r.name));
-          var s = document.createElement("a");
-          s.appendChild(document.createTextNode(r.rating));
-          var titl = document.createElement("h6");
-          titl.appendChild(a).insertAdjacentHTML('afterend', "&nbsp; - &nbsp;");
-          titl.appendChild(i).insertAdjacentHTML('afterend', "&nbsp;");
-          titl.appendChild(s);
-          titl.className = 'h6 text-dark';
-          var text = document.createElement("p");
-          text.appendChild(document.createTextNode(r.review));
-          text.className = 'mb-0 review';
-          var foot = document.createElement("a");
-          foot.appendChild(document.createTextNode(r.date));
-          foot.className = 'blockquote-footer date-review';
-          var div = document.createElement("div");
-          div.appendChild(titl);
-          div.appendChild(text);
-          div.appendChild(foot);
-          div.className = 'stips_cmd';
-          var blqot = document.createElement("blockquote");
-          blqot.appendChild(div);
-          blqot.className = 'blockquote text-left mb-auto';
-          node = document.createElement("div");
-          node.className = 'fadeInRight';
-          node.appendChild(blqot);
-          return node;
+        function g2_response(TEXT, element){
+          $('#reviewModal').modal('hide')
+          try{
+            var json = JSON.parse(TEXT);
+            document.getElementById(element).innerHTML = '';
+            for (var e in json) {
+              r = json[e]
+              console.log(r)
+              var i = document.createElement("i");
+              i.className = 'fa fa-star color-yelow';
+              var a = document.createElement("a");
+              a.appendChild(document.createTextNode(r.name));
+              var s = document.createElement("a");
+              s.appendChild(document.createTextNode(r.rating));
+              var titl = document.createElement("h6");
+              titl.appendChild(a).insertAdjacentHTML('afterend', "&nbsp; - &nbsp;");
+              titl.appendChild(i).insertAdjacentHTML('afterend', "&nbsp;");
+              titl.appendChild(s);
+              titl.className = 'h6 text-dark';
+              var text = document.createElement("p");
+              text.appendChild(document.createTextNode(r.review));
+              text.className = 'mb-0 review';
+              var foot = document.createElement("a");
+              foot.appendChild(document.createTextNode(r.date));
+              foot.className = 'blockquote-footer date-review';
+              var div = document.createElement("div");
+              div.appendChild(titl);
+              div.appendChild(text);
+              div.appendChild(foot);
+              div.className = 'stips_cmd';
+              var blqot = document.createElement("blockquote");
+              blqot.appendChild(div);
+              blqot.className = 'blockquote text-left mb-auto';
+              node = document.createElement("div");
+              node.className = 'fadeInRight';
+              node.appendChild(blqot);
+              document.getElementById(element).appendChild(node);
+            }
+          } catch {
+            alert(TEXT)
+          }
         }
         document.addEventListener("DOMContentLoaded", function() {
            console.log('Your document is ready!');
-            let ajax_form = new g2_ajax('POST', "{{ url_for('add_review') }}");
-            ajax_form.postURL("data=review&search=0375701907");
+            let ajax_form = new g2_ajax('POST', "{{ url_for('API') }}/get_review/{{ data['data_book']['isbn'] }}");
             ajax_form.series(true);
             ajax_form.send('ajax_result');
         });
 
-        function ajaxPOST(form, button){
-            let ajax_form = new g2_ajax(form, "{{ url_for('add_review') }}");
+        function sendReview(form, button){
+            let ajax_form = new g2_ajax(form, "{{ url_for('API') }}/add_review/{{ data['data_book']['isbn'] }}");
             ajax_form.series(true);
-            ajax_form.postURL("&data=review&search=0375701907", true);
             ajax_form.send('ajax_result', button, '#6424D9');
         }
         </script>

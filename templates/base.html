@@ -7,7 +7,7 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>{{ data["page_title"] }}</title>
+    <title>{{ data['page_title'] }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" /> <!-- Bootstraps Styesheet -->
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" /> <!-- My Costom Styesheet -->
@@ -23,33 +23,30 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarsExample07">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item {% if data["page_active"]=="home" %}active{% endif %}">
+        <li class="nav-item {% if data['page_active']=="home" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for('index') }}">Home</a>
         </li>
-        <li class="nav-item {% if data["page_active"]=="books" %}active{% endif %}">
-          <a class="nav-link" href="{{ url_for('books') }}">Books</a>
-        </li>
     {% if not session['logged_in'] %}
-        <li class="nav-item {% if data["page_active"]=="about" %}active{% endif %}">
+        <li class="nav-item {% if data['page_active']=="about" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for('about') }}">Creator</a>
         </li>
-        <li class="nav-item {% if data["page_active"]=="contact" %}active{% endif %}">
+        <li class="nav-item {% if data['page_active']=="contact" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
         </li>
       </ul>
       <ul class="navbar-nav mr-right">
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal" data-target="#myModal">Login</a>
-        </li> <!--
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-        </li> -->
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('register') }}">Register</a>
         </li>
       </ul>
     {% else %}
-        <li class="nav-item {% if data["page_active"]=="user" %}active{% endif %}">
+        <li class="nav-item {% if data['page_active']=="books" %}active{% endif %}">
+          <a class="nav-link" href="{{ url_for('books') }}">Books</a>
+        </li>
+        <li class="nav-item {% if data['page_active']=="user" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for('user')}}">Data user</a>
         </li>
       </ul>
@@ -86,7 +83,7 @@
             <!-- Remind Passowrd -->
             <div id="formFooter">
               <a class="underlineHover" href="#" class="close" data-dismiss="modal">Cancel</a>
-            </div>
+            </div> 
 
       </div>
     </div>
@@ -96,9 +93,18 @@
     <div style="display:none">{{ content }}</div>
     {% endfor %}
     <header>
-      <h1>{{ data["title"] }}</h1>
+      <h1>{{ data['title'] }}</h1>
       <h4>Sebuah Document HTML yang dibuat sebagai latihan pembuatan WEB Page &copy;</h4>
     </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+              <div class="alert alert-{{ category }}" style="margin:15px;">
+                <a>{{ message }}</a>
+              </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
     {% block content %}{% endblock %}
             <footer>
         <a>Copyright &copy; 2019 Ghea Chandra S</a>

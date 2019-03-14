@@ -20,7 +20,7 @@ class g2_ajax{
               event.preventDefault();
             });
             for (var i = 0; i < form.length; i++) {
-                f_id  =  form.elements[i].id;
+                f_id  =  form.elements[i].name;
                 f_val =  form.elements[i].value;
                 if(f_id != null && f_id != '' && f_val != null && f_val != ''){
                     if(i>0){this._query += "&";}
@@ -104,7 +104,7 @@ class g2_ajax{
         var f_id;
         var f_val;
         for (var i = 0; i < form.length; i++) {
-            f_id  =  form.elements[i].id;
+            f_id  =  form.elements[i].name;
             f_val =  form.elements[i].value;
             if(f_id != null && f_id != '' && f_val != null && f_val != ''){
                 if(i>0){this._query += "&";}
@@ -203,18 +203,12 @@ class g2_ajax{
                     document.getElementById(element).innerHTML = '';
                     document.getElementById(element).appendChild(table);
                 }else if(buildSeries == true){
-                    var json = JSON.parse(TEXT);
-                    document.getElementById(element).innerHTML = '';
-                    console.log('Add Series')
-                    for (var e in json) {
-                        sleep(1000);
-                        try {
-                            document.getElementById(element).appendChild(g2_response(json[e])); 
-                        } catch (error) {
-                            console.log(error)
-                            document.getElementById(element).appendChild(json[e]);
-                        }
-                    };
+                    try {
+                        g2_response(TEXT, element); 
+                    } catch (error) {
+                        console.log("function g2_response(data, id) not found")
+                        console.log(error)
+                    }
                 }
                 else {
                     document.getElementById(element).innerHTML = TEXT;

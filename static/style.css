@@ -195,8 +195,8 @@ input[type=text], input[type=password], input[type=email], input[type=search] {
   @-webkit-keyframes fadeInDown {
     0% {
       opacity: 0;
-      -webkit-transform: translate3d(-100%, 0, 0);
-      transform: translate3d(-100%, 0, 0);   }
+      -webkit-transform: translate3d(0, -100%, 0);
+      transform: translate3d(0, -100%, 0);   }
       100% {
         opacity: 1;
         -webkit-transform: none;
@@ -206,8 +206,8 @@ input[type=text], input[type=password], input[type=email], input[type=search] {
 @keyframes fadeInDown {
   0% {
     opacity: 0;
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);   }
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);   }
     100% {
       opacity: 1;
       -webkit-transform: none;

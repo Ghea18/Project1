@@ -6,18 +6,18 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     user = Column(String(50))
-    name = Column(String(50))
-    mail = Column(String(120))
-    pswd = Column(String(50))
+    name = Column(String(128))
+    mail = Column(String(128))
+    password = Column(String(128))
     rank = Column(String(50))
     date = Column(DateTime, default=datetime.utcnow)
     stat = Column(String(120))
 
-    def __init__(self, user=None, name=None, mail=None, pswd=None, rank=None, date=None, stat=None):
+    def __init__(self, user=None, name=None, mail=None, password=None, rank=None, date=None, stat=None):
         self.user = user
         self.name = name
         self.mail = mail
-        self.pswd = pswd
+        self.password = password
         self.rank = rank
         self.date = date
         self.stat = stat
@@ -54,15 +54,17 @@ class Review(Base):
     usr_id = Column(Integer)
     name = Column(String(50))
     review = Column(String(256))
+    rating = Column(Integer)
     date = Column(DateTime, default=datetime.utcnow)
     stat = Column(String(120), default="ready")
 
-    def __init__(self, bok_id=None, b_isbn=None, usr_id=None, name=None, review=None, date=None, stat=None):
+    def __init__(self, bok_id=None, b_isbn=None, usr_id=None, name=None, review=None, rating = None, date=None, stat=None):
         self.bok_id = bok_id
         self.b_isbn = b_isbn
         self.usr_id = usr_id
         self.name = name
         self.review = review
+        self.rating = rating
         self.date = date
         self.stat = stat
 
