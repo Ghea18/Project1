@@ -3,20 +3,21 @@ import sys
 import requests
 from pprint import pprint
 from datetime import datetime
-from flask import Flask, session, render_template, url_for, request, redirect, jsonify, flash, abort
+from flask import Flask, session, render_template, url_for, make_response, request, redirect, jsonify, flash, abort
 from flask_scss import Scss
 from flask_session import Session
 from sqlalchemy import create_engine 
 from sqlalchemy.sql import func
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_hashing import Hashing as Hashing
-from flask_login import login_required
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
 from datetime import datetime
 
 from control_center import Data_control
 from database import db_session
-from models import User, Book, Review
+from models import User as db_User
 
+# Declare FLASK app
 app = Flask(__name__)
 title = "Project 1 (One)"
 
@@ -24,13 +25,21 @@ title = "Project 1 (One)"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["HASHING_METHOD"] = "sha256"
+app.config['SECRET_KEY'] = "lkkajdghdadkglajkgah" # a secret key for login
 
 # Init some fungtion needed in app
 Session(app)
 hash = Hashing(app)
-Scss(app, static_dir='static', asset_dir='static')
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'index' # the login view of your application
+login_manager.login_message = 'Silahkan login utuk dapat mengakses halaman.'
+login_manager.login_message_category = "warning"
+Scss(app, static_dir='static', asset_dir='static')
+
+class User(UserMixin):
+  def __init__(self,id):
+    self.id = id
 
 # Route Main Front Page
 @app.route('/index')
@@ -82,6 +91,7 @@ def contact():
 
 # Route Book search
 @app.route("/books", methods=["POST", "GET"])
+@login_required
 def books():
     # Page initial data
     html_file='books'
@@ -134,6 +144,7 @@ def books():
 # Route Book detail
 @app.route("/book/<isbn>")
 @app.route("/book")
+@login_required
 def book(isbn=None):
     # Cek if theare isbn if not redirect to search book page
     if isbn == None: redirect(url_for('books'))
@@ -154,27 +165,18 @@ def book(isbn=None):
     book = data_book[0]
 
     # Get Book rating from Goodsreads
-    try:
-        #import tool to process xml
-        import xml.etree.ElementTree as ET
-
+    try:    
         # Request data from goodreads
-        res = requests.get("https://www.goodreads.com/search/index.xml", params={"key": "dqUu9oCrKhE1x47m3oAUQ", "q": book.isbn})
-        
-        # Raise error if response failed
-        if res.status_code != 200:
-            raise Exception("ERROR: API request unsuccessful.")
-        
-        # Prosses data from Goodsread
-        root = ET.fromstring(res.text)
-        work = root.find("search").find("results")[0]
-        rating  = work.find("average_rating").text
-        # # Aditional info from Goodsreads =>
-        # ket_bk  = work.find("best_book")
-        # author  = ket_bk.find("author").find("name").text
-        # judul   = ket_bk.find("title").text
-        # img_url = ket_bk.find("image_url").text
+        goodreads = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "dqUu9oCrKhE1x47m3oAUQ", "isbns": book.isbn})
 
+        # Raise error if response failed
+        if goodreads.status_code != 200:
+            raise Exception("ERROR: API request unsuccessful.")
+
+        # Prosses data from Goodsread
+        goodreads = goodreads.json()
+        goodreads = goodreads['books'][0]
+    
         img_url = f"http://covers.openlibrary.org/b/isbn/{book.isbn}-M.jpg"
     except:
         # Aditional dummy info =>
@@ -185,13 +187,14 @@ def book(isbn=None):
 
     # Build data structur to pass on tempelate
     data_book = {
-        'title'     : book.title,
-        'year'      : book.year,
-        'isbn'      : book.isbn,
-        'author'    : book.author,
-        'id'        : book.id,
-        'rating'    : rating, 
-        'img_url'   : img_url
+        'title'             : book.title,
+        'year'              : book.year,
+        'isbn'              : book.isbn,
+        'author'            : book.author,
+        'id'                : book.id,
+        'rating'            : goodreads['average_rating'], 
+        'work_rating_count' : goodreads['work_ratings_count'],
+        'img_url'           : img_url
          }
     page_data.add('data_book', data_book)
 
@@ -202,6 +205,7 @@ def book(isbn=None):
 
 # Route to user list
 @app.route('/user')
+@login_required
 def user():
     # Page initial data
     html_file='user'
@@ -212,7 +216,7 @@ def user():
     # Content data code
     page_data.add('title', title)
 
-    data_user = User.query.all()
+    data_user = db_User.query.all()
     part["register"]    = False
     part["user_list"]   = True
     page_data.add('data_user', data_user)
@@ -307,10 +311,10 @@ def login():
             session['user_id'] = 1
             session['user_name'] = request.form['username']
             session['name'] = user_hash[1]
-
+            login_user(User(1))
             # Welcome user and redirected to book page
             print('login:'+ session['user_name'])
-            flash('Welcome '+session['user_name'], 'success')
+            flash('Welcome '+session['name'], 'success')
             sys.stdout.flush()
             return redirect(url_for('books'))
         else:
@@ -320,8 +324,10 @@ def login():
 
 # ROute for logout API
 @app.route('/logout', methods=["POST", "GET"])
+@login_required
 def logout():
     # remove the username from the session if it's there
+    logout_user()
     session.pop('logged_in', None)
     session.pop('username', None)
     session.clear()
@@ -346,15 +352,15 @@ def API(key=None, isbn=None):
         # Build data structur to send to browser
         colection={}
         num = 0
-        for book in data_review:
+        for review in data_review:
             colection[num]=({
-                'id'      : book.id,
-                'book_id' : book.bok_id,
-                'user_id' : book.usr_id,
-                'name'    : book.name,
-                'rating'  : int(book.rating),
-                'review'  : book.review,
-                'date'    : book.date
+                'id'      : review.id,
+                'book_id' : review.bok_id,
+                'user_id' : review.usr_id,
+                'name'    : review.name,
+                'rating'  : int(review.rating),
+                'review'  : review.review,
+                'date'    : review.date
                 })
             num = num+1
         data_review = colection
@@ -369,10 +375,6 @@ def API(key=None, isbn=None):
         # Get request data
         rating = request.form.get('rating')
         review = request.form.get('review')
-        print("data Form")
-        print(isbn)
-        print(rating)
-        print(review)
 
         # Get user data
         curent_user = session['user_id']
@@ -381,7 +383,6 @@ def API(key=None, isbn=None):
         # Cek id book
         base_data = db_session.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn":isbn}).fetchone()
         bookID = base_data[0]
-        print(bookID)
 
         # Cek for user submision 
         base_data = db_session.execute("SELECT * FROM reviews WHERE \
@@ -415,41 +416,52 @@ def API(key=None, isbn=None):
         # Build data structur to send to browser
         colection={}
         num = 0
-        for book in data_book:
+        for review in data_review:
             colection[num]=({
-                'id'      : book.id,
-                'book_id' : book.bok_id,
-                'user_id' : book.usr_id,
-                'name'    : book.name,
-                'rating'  : 5,
-                'review'  : book.review,
-                'date'    : book.date
+                'id'      : review.id,
+                'book_id' : review.bok_id,
+                'user_id' : review.usr_id,
+                'name'    : review.name,
+                'rating'  : int(review.rating),
+                'review'  : review.review,
+                'date'    : review.date
                 })
             num = num+1
-        data_book = colection
         
         # Convert data to json nad send it to browser
-        return jsonify(data_book)
+        return jsonify(colection)
     
     elif request.method == 'GET' and key != None:
         # Get request data
         isbn = key
+        
+        # Request data from goodreads      
+        goodreads = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "dqUu9oCrKhE1x47m3oAUQ", "isbns": isbn})
+
+        # Raise error if response failed
+        if goodreads.status_code != 200:
+            raise Exception("ERROR: API request unsuccessful.")
+
+        # Prosses data from Goodsread
+        goodreads = goodreads.json()
+        goodreads = goodreads['books'][0]
 
         # Get book book and review data from database
-        res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "dqUu9oCrKhE1x47m3oAUQ", "isbns": isbn})
-        res = res.json()
         data_book = db_session.execute('SELECT * FROM books WHERE isbn = :b_isbn',{"b_isbn":isbn}).fetchone()
         data_review = db_session.execute('SELECT COUNT(review), AVG(rating) FROM reviews WHERE b_isbn = :b_isbn',{"b_isbn":isbn}).fetchall()[0]
         db_session.commit()
 
+        print(data_book)
         # Build data structur to send to browser
         a = {
-            "title": data_book.title,
-            "author": data_book.author,
-            "year": data_book.year,
-            "isbn": data_book.isbn,
-            "review_count": data_review.count,
-            "average_score": round(float(data_review.avg))
+            "title" : data_book.title,
+            "author" : data_book.author,
+            "year" : data_book.year,
+            "isbn" : data_book.isbn,
+            "review_count" : data_review.count,
+            "average_score" : round(float(data_review.avg)),
+            "rating" : goodreads['average_rating'], 
+            "work_rating_count" : goodreads['work_ratings_count'],
         }
 
         # Convert data to json nad send it to browser
@@ -457,6 +469,19 @@ def API(key=None, isbn=None):
     
     else: abort(404)
 
+# Route to manage user
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    # Redirect to home
+    response = make_response(redirect(url_for('index'), code=302))
+    response.headers['url'] = 'parachutes are cool'
+    return response
+
+# Route to manage user
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()

@@ -7,8 +7,8 @@ from sqlalchemy.ext.declarative import declarative_base
 try:
     # Check for environment variable
     if not os.getenv("DATABASE_URL"):
-        #raise RuntimeError("DATABASE_URL is not set") 
-        engine = create_engine(os.getenv("postgres://nrpdpcdgweixjb:01a255acd77e3eaa7c808e768f94fceb5c2a0044d3cb5ac5197896fc07658cec@ec2-23-21-130-182.compute-1.amazonaws.com:5432/d35hm8i3hrbss4"))
+        raise RuntimeError("DATABASE_URL is not set") 
+        #engine = create_engine("postgres://nrpdpcdgweixjb:01a255acd77e3eaa7c808e768f94fceb5c2a0044d3cb5ac5197896fc07658cec@ec2-23-21-130-182.compute-1.amazonaws.com:5432/d35hm8i3hrbss4")
     else:
         engine = create_engine(os.getenv("DATABASE_URL"))
     # Create Database Access Session
