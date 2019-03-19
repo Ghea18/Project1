@@ -51,8 +51,11 @@
         </li>
       </ul>
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="navdrop" role="button" data-toggle="dropdown" data-hover="dropdown">{{ session['name'] }}</a>
+            <div class="dropdown-menu" aria-labelledby="navdrop">
+                <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+            </div>
         </li>
       </ul>
     {% endif %}

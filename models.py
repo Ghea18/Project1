@@ -33,7 +33,7 @@ class Book(Base):
     author = Column(String(50))
     year = Column(String(50))
     date = Column(DateTime, default=datetime.utcnow)
-    stat = Column(String(120), default="ready")
+    stat = Column(String(120), default="valid")
 
     def __init__(self, isbn=None, title=None, author=None, year=None, date=None, stat=None):
         self.isbn = isbn
@@ -56,7 +56,7 @@ class Review(Base):
     review = Column(String(256))
     rating = Column(Integer)
     date = Column(DateTime, default=datetime.utcnow)
-    stat = Column(String(120), default="ready")
+    stat = Column(String(120), default="valid")
 
     def __init__(self, bok_id=None, b_isbn=None, usr_id=None, name=None, review=None, rating = None, date=None, stat=None):
         self.bok_id = bok_id

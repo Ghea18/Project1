@@ -5,28 +5,17 @@ class g2_ajax{
         this._element = null;
         this._btn = null;
         this._color = '#FFFFFF';
-        let parent = this;
         this._query ='';
         this._respons;
         this._tabReq;
-        this._seriesReq
-        var f_id;
-        var f_val;
+        this._seriesReq;
+        this._form;
+        let parent = this;
         if (form!=null) {
-          if(typeof(form)==='string'){
+          if(typeof(form) === 'string'){
             this._method = form;
           }else{
-            form.addEventListener("click", function(event){
-              event.preventDefault();
-            });
-            for (var i = 0; i < form.length; i++) {
-                f_id  =  form.elements[i].name;
-                f_val =  form.elements[i].value;
-                if(f_id != null && f_id != '' && f_val != null && f_val != ''){
-                    if(i>0){this._query += "&";}
-                    this._query += f_id + "=" + f_val;
-                }
-            }
+            this._form = form
           }
         }
         /* The variable that makes Ajax possible! */
@@ -101,16 +90,7 @@ class g2_ajax{
          }
     }
     form(form){
-        var f_id;
-        var f_val;
-        for (var i = 0; i < form.length; i++) {
-            f_id  =  form.elements[i].name;
-            f_val =  form.elements[i].value;
-            if(f_id != null && f_id != '' && f_val != null && f_val != ''){
-                if(i>0){this._query += "&";}
-                this._query += f_id + "=" + f_val;
-            }
-        }
+        this._form = form;
     }
     table(bol){
         this._tabReq = bol;
@@ -119,23 +99,55 @@ class g2_ajax{
         this._seriesReq = bol;
     }
     send(id, lod, color){
+        
         if(lod != null && lod != ''){
-           this._btn = lod;
+            this._btn = lod;
         }
         if(color != '' && color != null){
-           this._color = color;
+            this._color = color;
         }
         if(id != null && id != ''){
-              this._element = id;
+            this._element = id;
         }
 
-        var btn = this._btn;
-        var element = this._element;
-        var buildTab = this._tabReq;
-        var buildSeries = this._seriesReq;
         var result;
         var notif = 0;
         var btnLast;
+        var btn = this._btn;
+        var element = this._element;
+        var buildSeries = this._seriesReq;
+        var buildTab = this._tabReq;
+        
+        addtoBTN('<div class="g2ajax-load-timer"></div> <style type="text/css"> /* Timer*/ .g2ajax-load-timer{color: '+this._color+'; width: 20px; height: 20px; background-color: transparent; box-shadow: inset 0px 0px 0px 2px '+this._color+'; border-radius: 50%; position: relative;} .g2ajax-load-timer:after, .g2ajax-load-timer:before{position: absolute; content:""; background-color: '+this._color+'; } .g2ajax-load-timer:after{width: 8px; height: 2px; top: 9px; left: 9px; -webkit-transform-origin: 1px 1px; -moz-transform-origin: 1px 1px; transform-origin: 1px 1px; -webkit-animation: minhand 2s linear infinite; -moz-animation: minhand 2s linear infinite; animation: minhand 2s linear infinite; } .g2ajax-load-timer:before{width: 7px; height: 2px; top: 9px; left: 9px; -webkit-transform-origin: 1px 1px; -moz-transform-origin: 1px 1px; transform-origin: 1px 1px; -webkit-animation: hrhand 8s linear infinite; -moz-animation: hrhand 8s linear infinite; animation: hrhand 8s linear infinite; } @-webkit-keyframes minhand{0%{-webkit-transform:rotate(0deg)} 100%{-webkit-transform:rotate(360deg)} } @-moz-keyframes minhand{0%{-moz-transform:rotate(0deg)} 100%{-moz-transform:rotate(360deg)} } @keyframes minhand{0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} } @-webkit-keyframes hrhand{0%{-webkit-transform:rotate(0deg)} 100%{-webkit-transform:rotate(360deg)} } @-moz-keyframes hrhand{0%{-moz-transform:rotate(0deg)} 100%{-moz-transform:rotate(360deg)} } @keyframes hrhand{0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} } </style>');
+
+        if (this._form !=null && this._form != '') {
+            this._form.addEventListener("click", function(event){
+                event.preventDefault();
+            });
+            for (var i = 0; i < this._form.length; i++) {
+                let f_name; let f_val; let cekform;
+                f_name  =  this._form.elements[i].name;
+                f_val =  this._form.elements[i].value;
+                if(f_name != ''){
+                    console.log('Empty form fild detected!')
+                    try {
+                        cekform=g2_cekform(this._form.elements[i]);
+                        if(!cekform){
+                            addtoBTN(btnLast);
+                            return false;
+                        }
+                    } catch (error) {
+                        console.log(error);
+                        console.log("function g2_cekform(element) not found")
+                    }
+                }
+                if(f_name != null && f_name != '' && f_val != null && f_val != ''){
+                    if(i>0){this._query += "&";}
+                    this._query += f_name + "=" + f_val;
+                }
+            }
+        }
+
         if(this._method.toLowerCase()=='post'){
             console.log('do post ajax!');
             this._ajax.open(this._method, this._link, true);
@@ -150,8 +162,6 @@ class g2_ajax{
         }else{
             console.log('Method not set!')
         }
-        
-        addtoBTN('<div class="g2ajax-load-timer"></div> <style type="text/css"> /* Timer*/ .g2ajax-load-timer{color: '+this._color+'; width: 20px; height: 20px; background-color: transparent; box-shadow: inset 0px 0px 0px 2px '+this._color+'; border-radius: 50%; position: relative;} .g2ajax-load-timer:after, .g2ajax-load-timer:before{position: absolute; content:""; background-color: '+this._color+'; } .g2ajax-load-timer:after{width: 8px; height: 2px; top: 9px; left: 9px; -webkit-transform-origin: 1px 1px; -moz-transform-origin: 1px 1px; transform-origin: 1px 1px; -webkit-animation: minhand 2s linear infinite; -moz-animation: minhand 2s linear infinite; animation: minhand 2s linear infinite; } .g2ajax-load-timer:before{width: 7px; height: 2px; top: 9px; left: 9px; -webkit-transform-origin: 1px 1px; -moz-transform-origin: 1px 1px; transform-origin: 1px 1px; -webkit-animation: hrhand 8s linear infinite; -moz-animation: hrhand 8s linear infinite; animation: hrhand 8s linear infinite; } @-webkit-keyframes minhand{0%{-webkit-transform:rotate(0deg)} 100%{-webkit-transform:rotate(360deg)} } @-moz-keyframes minhand{0%{-moz-transform:rotate(0deg)} 100%{-moz-transform:rotate(360deg)} } @keyframes minhand{0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} } @-webkit-keyframes hrhand{0%{-webkit-transform:rotate(0deg)} 100%{-webkit-transform:rotate(360deg)} } @-moz-keyframes hrhand{0%{-moz-transform:rotate(0deg)} 100%{-moz-transform:rotate(360deg)} } @keyframes hrhand{0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} } </style>');
 
         this._ajax.onreadystatechange = function(){
             if(this.readyState == 4){
@@ -184,9 +194,6 @@ class g2_ajax{
            if(this.readyState == 2){
               console.log('request ajax send!');
            }
-        }
-        const sleep = (milliseconds) => {
-            return new Promise(resolve => setTimeout(resolve, milliseconds))
         }
         function addtoBTN(TEXT){
             if(btn != null && btn != ''){

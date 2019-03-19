@@ -82,11 +82,11 @@
                               <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Rating</label>
                               </div>
-                              <select class="custom-select" id="inputGroupSelect01" name="rating">
-                                <option selected>Choose...</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                              <select class="custom-select" id="inputGroupSelect01" name="rating" required="true">
+                                <option value="" selected hidden>Pilih Rating...</option>
+                                <option value="1">Satu</option>
+                                <option value="2">Dua</option>
+                                <option value="3">Tiga</option>
                                 <option value="4">Empat</option>
                                 <option value="5">Lima</option>
                               </select>
@@ -97,8 +97,8 @@
                           </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" onclick = 'sendReview(this.form, this)' return false>Save changes</button>
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-outline-primary" onclick = 'sendReview(this.form, this)' return false>Save changes</button>
                           </div>
                           </form>
                         </div>
@@ -121,42 +121,65 @@
           $('#reviewModal').modal('hide')
           try{
             var json = JSON.parse(TEXT);
-            document.getElementById(element).innerHTML = '';
-            for (var e in json) {
-              r = json[e]
-              console.log(r)
-              var i = document.createElement("i");
-              i.className = 'fa fa-star color-yelow';
-              var a = document.createElement("a");
-              a.appendChild(document.createTextNode(r.name));
-              var s = document.createElement("a");
-              s.appendChild(document.createTextNode(r.rating));
-              var titl = document.createElement("h6");
-              titl.appendChild(a).insertAdjacentHTML('afterend', "&nbsp; - &nbsp;");
-              titl.appendChild(i).insertAdjacentHTML('afterend', "&nbsp;");
-              titl.appendChild(s);
-              titl.className = 'h6 text-dark';
-              var text = document.createElement("p");
-              text.appendChild(document.createTextNode(r.review));
-              text.className = 'mb-0 review';
-              var foot = document.createElement("a");
-              foot.appendChild(document.createTextNode(r.date));
-              foot.className = 'blockquote-footer date-review';
-              var div = document.createElement("div");
-              div.appendChild(titl);
-              div.appendChild(text);
-              div.appendChild(foot);
-              div.className = 'stips_cmd';
-              var blqot = document.createElement("blockquote");
-              blqot.appendChild(div);
-              blqot.className = 'blockquote text-left mb-auto';
-              node = document.createElement("div");
-              node.className = 'fadeInRight';
-              node.appendChild(blqot);
-              document.getElementById(element).appendChild(node);
+            if(json[0] == null){
+              document.getElementById(element).innerHTML = '';
+              var h = document.createElement("h6");
+              h.className = "text-center";
+              h.appendChild(document.createTextNode("Review Buku Tidak Ada"));
+              document.getElementById(element).appendChild(h);
+            }
+            else{
+              document.getElementById(element).innerHTML = '';
+              for (var e in json) {
+                r = json[e]
+                console.log(r)
+                var i = document.createElement("i");
+                i.className = 'fa fa-star color-yelow';
+                var a = document.createElement("a");
+                a.appendChild(document.createTextNode(r.name));
+                var s = document.createElement("a");
+                s.appendChild(document.createTextNode(r.rating));
+                var titl = document.createElement("h6");
+                titl.appendChild(a).insertAdjacentHTML('afterend', "&nbsp; - &nbsp;");
+                titl.appendChild(i).insertAdjacentHTML('afterend', "&nbsp;");
+                titl.appendChild(s);
+                titl.className = 'h6 text-dark';
+                var text = document.createElement("p");
+                text.appendChild(document.createTextNode(r.review));
+                text.className = 'mb-0 review';
+                var foot = document.createElement("a");
+                foot.appendChild(document.createTextNode(r.date));
+                foot.className = 'blockquote-footer date-review';
+                var div = document.createElement("div");
+                div.appendChild(titl);
+                div.appendChild(text);
+                div.appendChild(foot);
+                div.className = 'stips_cmd';
+                var blqot = document.createElement("blockquote");
+                blqot.appendChild(div);
+                blqot.className = 'blockquote text-left mb-auto';
+                node = document.createElement("div");
+                node.className = 'fadeInRight';
+                node.appendChild(blqot);
+                document.getElementById(element).appendChild(node);
+              }
             }
           } catch {
             alert(TEXT)
+          }
+        }
+
+        function g2_cekform(element){
+          if(element.value==''){
+            var name = element.name;
+            element.classList.remove("valid");
+            element.classList.add("is-invalid");
+            alert("Please don't leave "+name+" form field empty");
+            return false;
+          }else{
+            element.classList.remove("is-invalid");
+            element.classList.add("valid");
+            return true;
           }
         }
         document.addEventListener("DOMContentLoaded", function() {
